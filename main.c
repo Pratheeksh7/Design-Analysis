@@ -1,32 +1,48 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define SIZE 100
-void insertionsort(int A[SIZE],int n)
+void bfs(int A[10][10],int n,int visited[10],int source)
 {
-    int i,j,item;
-    for(i=1;i<=n-1;i++)
+    int q[10],rear=-1,front=0,i,delNode;
+    visited[source]=1;
+    q[++rear]=source;
+    while(front<=rear)
     {
-        item=A[i];
-        j=i-1;
-        while(j>=0 && A[j]>item)
+        delNode=q[front++];
+        for(i=1;i<=n;i++)
         {
-            A[j+1]=A[j];
-            j=j-1;
+            if(A[delNode][i]==1 && visited[i]==0)
+            {
+                q[++rear]=i;
+                visited[i]=1;
+            }
         }
-        A[j+1]=item;
     }
 }
 int main()
 {
-    int A[SIZE],n,i;
-    printf("Enter the size of Array:");
-    scanf("%d",&n);
-    printf("\nEnter the elements into array:");
-    for(i=0;i<n;i++)
-        scanf("%d",&A[i]);
-    insertionsort(A,n);
-    printf("\nAfter Sorting:\t");
-    for(i=0;i<n;i++)
-        printf("%d\t",A[i]);
+   int n,A[10][10],i,j,visited[10],count=0;
+   printf("\nEnter the number of nodes:");
+   scanf("%d",&n);
+   printf("\nRead adjacency matrix\n");
+   for(i=1;i<=n;i++)
+   {
+       for(j=1;j<=n;j++)
+           scanf("%d",&A[i][j]);
+
+   }
+   for(i=1;i<=n;i++)
+    visited[i]=0;
+   for(i=1;i<=n;i++)
+   {
+       if(visited[i]==0)
+       {
+             bfs(A,n,visited,i);
+             count++;
+       }
+   }
+   if(count==1)
+    printf("\nGraph is connected,1 component");
+   else
+    printf("\nGraph is not connected , %d component",count);
     return 0;
 }
